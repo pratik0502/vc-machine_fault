@@ -1,0 +1,75 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python src/data/data_ingestion.py
+    deps:
+    - path: src/data/data_ingestion.py
+      hash: md5
+      md5: 047979b4c8b447ac67da7cd3b76f7baf
+      size: 1305
+    params:
+      params.yaml:
+        data_ingestion.test_size: 0.2
+    outs:
+    - path: data/raw
+      hash: md5
+      md5: 8259900d9e34a65eafb8d2621ed23743.dir
+      size: 26235
+      nfiles: 2
+  data_preprocessing:
+    cmd: python src/data/data_preprocessing.py
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: 8259900d9e34a65eafb8d2621ed23743.dir
+      size: 26235
+      nfiles: 2
+    - path: src/data/data_preprocessing.py
+      hash: md5
+      md5: c8d24a9729c8c7c7aafc280a6f297ee9
+      size: 1093
+    outs:
+    - path: data/preprocessed_data
+      hash: md5
+      md5: 35b822749405a7f9d51058a88295cf62.dir
+      size: 206074
+      nfiles: 2
+  model_building:
+    cmd: python src/model/model_building.py
+    deps:
+    - path: data/preprocessed_data
+      hash: md5
+      md5: 35b822749405a7f9d51058a88295cf62.dir
+      size: 206074
+      nfiles: 2
+    - path: src/model/model_building.py
+      hash: md5
+      md5: ae18351eca6ceb571daf2dfe71f91a38
+      size: 1106
+    params:
+      params.yaml:
+        model_building.C: 0.01
+        model_building.gamma: auto
+        model_building.kernel: sigmoid
+        model_building.random_state: 42
+    outs:
+    - path: model.pkl
+      hash: md5
+      md5: cd382a5078d2e49cd02f4f070c22b98b
+      size: 62017
+  model_eval:
+    cmd: python src/model/model_eval.py
+    deps:
+    - path: model.pkl
+      hash: md5
+      md5: cd382a5078d2e49cd02f4f070c22b98b
+      size: 62017
+    - path: src/model/model_eval.py
+      hash: md5
+      md5: 9ed562a0e210e2e26f1750d8b0c4ffd8
+      size: 1193
+    outs:
+    - path: metrics.json
+      hash: md5
+      md5: c41b6957f7ee339f3db0863905a17d70
+      size: 149
