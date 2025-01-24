@@ -1,14 +1,15 @@
 import pandas as pd
 import numpy as np
 import os
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler,MinMaxScaler
 
 # Load raw data
 train_data = pd.read_csv(r'D:\ML_ops\pratik\machine_fault_cc\machine_fault_prediction\data\raw\train.csv')
 test_data = pd.read_csv(r'D:\ML_ops\pratik\machine_fault_cc\machine_fault_prediction\data\raw\test.csv')
 
 # Standardize data
-scaler = StandardScaler()
+# scaler = StandardScaler()
+scaler = MinMaxScaler()
 train_preprocess = scaler.fit_transform(train_data)
 test_preprocess = scaler.transform(test_data)
 
